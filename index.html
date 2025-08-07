@@ -3,58 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Library System</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Library Login</title>
+  <link rel="stylesheet" href="login.css" />
 </head>
 <body>
-  <div class="container" id="auth-section">
-    <h1>Library Login</h1>
-    <div class="form-group">
-      <input type="email" id="login-email" placeholder="Email" required />
-      <input type="password" id="login-password" placeholder="Password" required />
-      <button onclick="login()">Login</button>
-    </div>
+  <div class="login-container">
+    <div class="login-box">
+      <h2>📚 Library Login</h2>
+      <form id="loginForm">
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" required placeholder="Enter your email" />
+        </div>
 
-    <h2>OR Create Account</h2>
-    <div class="form-group">
-      <input type="text" id="signup-name" placeholder="Full Name" required />
-      <input type="text" id="signup-mobile" placeholder="Mobile Number" required />
-      <input type="email" id="signup-email" placeholder="Email" required />
-      <input type="password" id="signup-password" placeholder="Password" required />
-      <select id="signup-role">
-        <option value="Student">Student</option>
-        <option value="Librarian">Librarian</option>
-        <option value="Others">Others</option>
-      </select>
-      <button onclick="signup()">Sign Up</button>
-    </div>
-  </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="Enter your password" />
+        </div>
 
-  <!-- Library Page (After Login) -->
-  <div class="container" id="library-section" style="display:none;">
-    <h1>Welcome to Library</h1>
-    <p id="welcome-text"></p>
-    <button onclick="logout()">Logout</button>
+        <div class="input-group">
+          <label for="role">Login As</label>
+          <select id="role" required>
+            <option value="">-- Select Role --</option>
+            <option value="Student">Student</option>
+            <option value="Librarian">Librarian</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
 
-    <!-- Librarian Only -->
-    <div id="librarian-panel" style="display:none;">
-      <h2>Librarian Panel</h2>
-      <button onclick="alert('Add Book Form')">Add New Book</button>
-      <button onclick="alert('Delete Book Logic')">Delete Book</button>
-    </div>
-
-    <!-- User Accessible -->
-    <div>
-      <h2>Library Options</h2>
-      <ul>
-        <li><button onclick="alert('View All Books')">📚 View All Books</button></li>
-        <li><button onclick="alert('My Book List')">📝 My Book List</button></li>
-        <li><button onclick="alert('Issued Books')">📖 View Issued Books</button></li>
-        <li><button onclick="alert('Book Recommendations')">🤖 Book Recommendations</button></li>
-      </ul>
+        <button type="submit">Login</button>
+        <p class="signup-link">Don't have an account? <a href="signup.html">Create one</a></p>
+      </form>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>
