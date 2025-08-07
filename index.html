@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Authentication Section -->
+    <section id="auth-section" class="auth-container">
+      <h2>Library Management System</h2>
+      <div class="form-section">
+        <h3>Create Account</h3>
+        <input type="text" id="auth-name" placeholder="Full Name">
+        <input type="text" id="auth-mobile" placeholder="Mobile Number">
+        <input type="email" id="auth-email" placeholder="Email">
+        <input type="password" id="auth-password" placeholder="Password">
+        <select id="auth-role">
+          <option value="student">Student</option>
+          <option value="librarian">Librarian</option>
+          <option value="other">Other</option>
+        </select>
+        <button onclick="signup()">Sign Up</button>
+      </div>
+      <hr>
+      <div class="form-section">
+        <h3>Login</h3>
+        <input type="email" id="login-email" placeholder="Email">
+        <input type="password" id="login-password" placeholder="Password">
+        <button onclick="login()">Login</button>
+      </div>
+    </section>
+
+    <!-- Main Dashboard -->
+    <section id="dashboard" style="display:none">
+      <div class="topbar">
+        <h2 id="welcome"></h2>
+        <button onclick="logout()" class="logout-btn">Logout</button>
+      </div>
+
+      <!-- Book List Section -->
+      <div id="books-list" class="book-list-section"></div>
+
+      <!-- Add Book (Librarian Only) -->
+      <div id="add-book-section" class="form-section" style="display:none">
+        <h3>Add New Book</h3>
+        <input type="text" id="book-title" placeholder="Book Title">
+        <input type="text" id="book-author" placeholder="Author">
+        <input type="text" id="book-cover" placeholder="Cover Image URL">
+        <textarea id="book-description" placeholder="Book Description"></textarea>
+        <textarea id="book-index" placeholder="Book Index"></textarea>
+        <button onclick="addBook()">Add Book</button>
+      </div>
+
+      <!-- Favorite & Issued Books -->
+      <div class="split-section">
+        <div id="my-books" class="favorites-section"></div>
+        <div id="issued-books" class="issued-section"></div>
+      </div>
+
+      <!-- Book Recommendations -->
+      <div id="recommendation-section" class="recommendation-section"></div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
