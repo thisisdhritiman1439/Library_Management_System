@@ -4,67 +4,134 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Library Management System</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #333;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #dashboard {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <!-- Authentication Section -->
-    <section id="auth-section" class="auth-container">
-      <h2>Library Management System</h2>
-      <div class="form-section">
-        <h3>Create Account</h3>
-        <input type="text" id="auth-name" placeholder="Full Name">
-        <input type="text" id="auth-mobile" placeholder="Mobile Number">
-        <input type="email" id="auth-email" placeholder="Email">
-        <input type="password" id="auth-password" placeholder="Password">
-        <select id="auth-role">
-          <option value="student">Student</option>
-          <option value="librarian">Librarian</option>
-          <option value="other">Other</option>
-        </select>
-        <button onclick="signup()">Sign Up</button>
-      </div>
-      <hr>
-      <div class="form-section">
-        <h3>Login</h3>
-        <input type="email" id="login-email" placeholder="Email">
-        <input type="password" id="login-password" placeholder="Password">
-        <button onclick="login()">Login</button>
-      </div>
-    </section>
 
-    <!-- Main Dashboard -->
-    <section id="dashboard" style="display:none">
-      <div class="topbar">
-        <h2 id="welcome"></h2>
-        <button onclick="logout()" class="logout-btn">Logout</button>
-      </div>
+<div class="container" id="auth-section">
+  <h2>Login</h2>
+  <input type="email" id="login-email" placeholder="Email">
+  <input type="password" id="login-password" placeholder="Password">
+  <button onclick="login()">Login</button>
 
-      <!-- Book List Section -->
-      <div id="books-list" class="book-list-section"></div>
+  <h2>Sign Up</h2>
+  <input type="text" id="auth-name" placeholder="Full Name">
+  <input type="text" id="auth-mobile" placeholder="Mobile Number">
+  <input type="email" id="auth-email" placeholder="Email">
+  <input type="password" id="auth-password" placeholder="Password">
+  <select id="auth-role">
+    <option value="student">Student</option>
+    <option value="librarian">Librarian</option>
+    <option value="other">Other</option>
+  </select>
+  <button onclick="signup()">Sign Up</button>
+</div>
 
-      <!-- Add Book (Librarian Only) -->
-      <div id="add-book-section" class="form-section" style="display:none">
-        <h3>Add New Book</h3>
-        <input type="text" id="book-title" placeholder="Book Title">
-        <input type="text" id="book-author" placeholder="Author">
-        <input type="text" id="book-cover" placeholder="Cover Image URL">
-        <textarea id="book-description" placeholder="Book Description"></textarea>
-        <textarea id="book-index" placeholder="Book Index"></textarea>
-        <button onclick="addBook()">Add Book</button>
-      </div>
-
-      <!-- Favorite & Issued Books -->
-      <div class="split-section">
-        <div id="my-books" class="favorites-section"></div>
-        <div id="issued-books" class="issued-section"></div>
-      </div>
-
-      <!-- Book Recommendations -->
-      <div id="recommendation-section" class="recommendation-section"></div>
-    </section>
+<div class="container" id="dashboard">
+  <h2 id="welcome">Welcome</h2>
+  <div id="add-book-section" style="display:none;">
+    <p>Add Book Section (Librarian Only)</p>
   </div>
+  <div id="delete-book-section" style="display:none;">
+    <p>Delete Book Section (Librarian Only)</p>
+  </div>
+</div>
 
-  <script src="script.js"></script>
+<script>
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
+
+  function signup() {
+    const name = document.getElementById("auth-name").value.trim();
+    const mobile = document.getElementById("auth-mobile").value.trim();
+    const email = document.getElementById("auth-email").value.trim();
+    const password = document.getElementById("auth-password").value.trim();
+    const role = document.getElementById("auth-role").value;
+
+    if (!name || !mobile || !email || !password) {
+      alert("Please fill all the fields.");
+      return;
+    }
+
+    users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (users.find(user => user.email === email)) {
+      alert("User already exists!");
+      return;
+    }
+
+    const newUser = { name, mobile, email, password, role };
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Account created successfully! You can now log in.");
+  }
+
+  function login() {
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+
+    users = JSON.parse(localStorage.getItem("users")) || [];
+
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (!user) {
+      alert("Invalid login!");
+      return;
+    }
+
+    currentUser = user;
+    localStorage.setItem("currentUser", JSON.stringify(user));
+
+    document.getElementById("auth-section").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+    document.getElementById("welcome").innerText = `Welcome, ${user.name} (${user.role})`;
+
+    if (user.role === 'librarian') {
+      document.getElementById("add-book-section").style.display = 'block';
+      document.getElementById("delete-book-section").style.display = 'block';
+    } else {
+      document.getElementById("add-book-section").style.display = 'none';
+      document.getElementById("delete-book-section").style.display = 'none';
+    }
+  }
+</script>
+
 </body>
 </html>
