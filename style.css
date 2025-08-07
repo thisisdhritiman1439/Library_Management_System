@@ -1,61 +1,54 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f7fa;
 }
 
 .container {
-  width: 100%;
-  max-width: 400px;
-  background: white;
-  padding: 30px;
-  border-radius: 8px;
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 25px;
+  background-color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 
-form input,
-form select,
-form button {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
+h1, h2 {
+  text-align: center;
+  color: #333;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+input, select, button {
+  padding: 10px;
+  font-size: 16px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
-form button {
-  background: #007bff;
+button {
+  background-color: #007bff;
   color: white;
   border: none;
   cursor: pointer;
 }
 
-form button:hover {
-  background: #0056b3;
+button:hover {
+  background-color: #0056b3;
 }
 
-a {
-  color: #007bff;
-  text-decoration: none;
+ul {
+  list-style-type: none;
+  padding-left: 0;
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
-.hidden {
-  display: none;
-}
-
-h2, h3 {
-  text-align: center;
+ul li {
+  margin: 10px 0;
 }
