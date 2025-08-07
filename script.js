@@ -16,13 +16,18 @@ async function loadBooks() {
 }
 
 function signup() {
+  users = JSON.parse(localStorage.getItem("users")) || []; // 🔁 Reload users before adding
+
   const name = document.getElementById("auth-name").value;
   const mobile = document.getElementById("auth-mobile").value;
   const email = document.getElementById("auth-email").value;
   const password = document.getElementById("auth-password").value;
   const role = document.getElementById("auth-role").value;
 
-  if (users.find(user => user.email === email)) return alert("User already exists!");
+  if (users.find(user => user.email === email)) {
+    alert("User already exists!");
+    return;
+  }
 
   const newUser = { name, mobile, email, password, role };
   users.push(newUser);
@@ -33,10 +38,19 @@ function signup() {
 function login() {
   const email = document.getElementById("login-email").value;
   const password = document.getElementById("login-password").value;
+
+  users = JSON.parse(localStorage.getItem("users")) || []; // 🔁 Always reload latest users list
+
   const user = users.find(u => u.email === email && u.password === password);
-  if (!user) return alert("Invalid login!");
+
+  if (!user) {
+    alert("Invalid login!");
+    return;
+  }
+
   currentUser = user;
   localStorage.setItem("currentUser", JSON.stringify(user));
+
   document.getElementById("auth-section").style.display = "none";
   document.getElementById("dashboard").style.display = "block";
   document.getElementById("welcome").innerText = `Welcome, ${user.name} (${user.role})`;
