@@ -1,64 +1,87 @@
-function signup() {
-  const name = document.getElementById('signup-name').value.trim();
-  const mobile = document.getElementById('signup-mobile').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const password = document.getElementById('signup-password').value.trim();
-  const role = document.getElementById('signup-role').value;
+// Toggle login/signup section
+function toggleSection(section) {
+  document.getElementById("login-section").classList.add("hidden");
+  document.getElementById("signup-section").classList.add("hidden");
+  document.getElementById("dashboard-section").classList.add("hidden");
 
-  if (!name || !mobile || !email || !password) {
-    alert("Please fill in all sign-up fields.");
-    return;
+  if (section === "login") {
+    document.getElementById("login-section").classList.remove("hidden");
+  } else if (section === "signup") {
+    document.getElementById("signup-section").classList.remove("hidden");
+  } else {
+    document.getElementById("dashboard-section").classList.remove("hidden");
   }
+}
 
-  const users = JSON.parse(localStorage.getItem("users") || "[]");
+// Sign up logic
+document.getElementById("signupForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const name = document.getElementById("signupName").value;
+  const mobile = document.getElementById("signupMobile").value;
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+  const role = document.getElementById("signupRole").value;
 
-  if (users.find(user => user.email === email)) {
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  if (users.find((u) => u.email === email)) {
     alert("User already exists!");
     return;
   }
 
   users.push({ name, mobile, email, password, role });
   localStorage.setItem("users", JSON.stringify(users));
-  alert("Account created successfully. You can now log in.");
-}
+  alert("Account created! Please login.");
+  toggleSection("login");
+});
 
-function login() {
-  const email = document.getElementById('login-email').value.trim();
-  const password = document.getElementById('login-password').value.trim();
+// Login logic
+document.getElementById("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
 
-  const users = JSON.parse(localStorage.getItem("users") || "[]");
-  const user = users.find(user => user.email === email && user.password === password);
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  const user = users.find((u) => u.email === email && u.password === password);
 
   if (!user) {
-    alert("Invalid login credentials.");
+    alert("Invalid credentials!");
     return;
   }
 
   localStorage.setItem("currentUser", JSON.stringify(user));
-  showLibraryPage(user);
-}
+  showDashboard(user);
+});
 
-function showLibraryPage(user) {
-  document.getElementById('auth-section').style.display = 'none';
-  document.getElementById('library-section').style.display = 'block';
+// Show dashboard based on role
+function showDashboard(user) {
+  document.getElementById("userName").innerText = user.name;
+  document.getElementById("userRole").innerText = user.role;
 
-  document.getElementById('welcome-text').innerText = `Hello ${user.name} (${user.role})`;
+  document.getElementById("librarianPanel").classList.add("hidden");
+  document.getElementById("studentPanel").classList.add("hidden");
+  document.getElementById("otherPanel").classList.add("hidden");
 
   if (user.role === "Librarian") {
-    document.getElementById('librarian-panel').style.display = 'block';
+    document.getElementById("librarianPanel").classList.remove("hidden");
+  } else if (user.role === "Student") {
+    document.getElementById("studentPanel").classList.remove("hidden");
   } else {
-    document.getElementById('librarian-panel').style.display = 'none';
+    document.getElementById("otherPanel").classList.remove("hidden");
   }
+
+  toggleSection("dashboard");
 }
 
+// Logout
 function logout() {
   localStorage.removeItem("currentUser");
-  document.getElementById('auth-section').style.display = 'block';
-  document.getElementById('library-section').style.display = 'none';
+  toggleSection("login");
 }
 
 // Auto-login if already signed in
-window.onload = () => {
+window.onload = function () {
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (user) showLibraryPage(user);
+  if (user) {
+    showDashboard(user);
+  }
 };
